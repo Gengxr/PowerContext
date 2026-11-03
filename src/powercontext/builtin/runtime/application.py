@@ -168,6 +168,7 @@ from powercontext.builtin.runtime._scope_cache import (
 )
 from powercontext.builtin.runtime.context_pack import ContextPack, ContextPackDelta, ContextPackError, aligned_pack
 from powercontext.builtin.runtime.decision_model import DecisionModel
+from powercontext.builtin.runtime.source_lifecycle import SourceLifecycleApplication
 from powercontext.builtin.runtime.errors import InvalidRuntimeRequestError, TopicMemoryProcessingUnavailableError
 from powercontext.builtin.runtime.models import (
     ApproveArtifactCandidateRequest,
@@ -2691,6 +2692,12 @@ class ScopedTopicMemoryApplication:
                     query_embedding,
                     embedding_timeout_seconds,
                 )
+        suppressed = await self._runtime.lifecycle.for_scope(self.scope_id).suppressed_topic_artifacts()
+        if suppressed:
+            # Topic Memory without lifecycle support stays exactly readable but leaves recall.
+            result = result.model_copy(
+                update={"hits": tuple(hit for hit in result.hits if hit.artifact_ref.artifact_id not in suppressed)}
+            )
         observer = self._runtime._topic_memory_search_observer
         if observer is not None:
             try:
@@ -3135,6 +3142,7 @@ class BuiltinRuntime:
         self.memory = MemoryApplication(self)
         self.topic_memory = TopicMemoryApplication(self)
         self.records = RecordApplication(self)
+        self.lifecycle = SourceLifecycleApplication(self)
         self.prompts = PromptApplication(self)
         self.review = ReviewApplication(self)
         self.skill = SkillApplication(self)

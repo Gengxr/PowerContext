@@ -895,6 +895,26 @@ RECALL_TOKEN_DAILY_TABLE = Table(
     CheckConstraint("recalled_tokens >= 0", name="ck_pc_recall_token_daily_recalled_nonnegative"),
 )
 
+MAX_SOURCE_LIFECYCLE_NODE_ID_LENGTH = 256
+
+SOURCE_LIFECYCLE_NODES_TABLE = Table(
+    "pc_source_lifecycle_nodes",
+    SHARED_METADATA,
+    Column("scope_id", identity_string(MAX_SCOPE_ID_LENGTH), primary_key=True),
+    Column("node_id", identity_string(MAX_SOURCE_LIFECYCLE_NODE_ID_LENGTH), primary_key=True),
+    Column("ordinal", BigInteger, nullable=False),
+    Column("kind", String(16), nullable=False),
+    Column("reference", Text, nullable=False),
+    Column("parents", Text, nullable=False),
+    Column("policy", String(8)),
+    Column("revision", BigInteger),
+    Column("available", Boolean, nullable=False),
+    Column("native_suppressed", Boolean, nullable=False, server_default="0"),
+    Column("last_event", Text),
+    UniqueConstraint("scope_id", "ordinal", name="uq_pc_source_lifecycle_nodes_ordinal"),
+    CheckConstraint("ordinal > 0", name="ck_pc_source_lifecycle_nodes_ordinal_positive"),
+)
+
 SHARED_TABLES = (
     SOURCE_JOURNAL_HEADS_TABLE,
     SOURCES_TABLE,
@@ -923,6 +943,7 @@ SHARED_TABLES = (
     SKILL_PACKAGES_TABLE,
     AGENT_SKILL_TARGETS_TABLE,
     SKILL_PUBLICATIONS_TABLE,
+    SOURCE_LIFECYCLE_NODES_TABLE,
 )
 
 
