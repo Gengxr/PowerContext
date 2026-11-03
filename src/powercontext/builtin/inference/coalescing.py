@@ -77,9 +77,7 @@ class CoalescingEmbeddingModel:
         self._cache_size = cache_size
         self._documents = _Channel(model.embed)
         # Asymmetric providers embed queries in their own space; symmetric ones share documents.
-        self._queries = (
-            _Channel(model.embed_query) if isinstance(model, QueryEmbeddingModel) else self._documents
-        )
+        self._queries = _Channel(model.embed_query) if isinstance(model, QueryEmbeddingModel) else self._documents
         self._tasks: set[asyncio.Task[None]] = set()
 
     @property
@@ -149,7 +147,7 @@ class CoalescingEmbeddingModel:
         try:
             result = await channel.embed(texts)
             if len(result.vectors) != len(texts):
-                raise ValueError(  # noqa: TRY301
+                raise ValueError(  # noqa: TRY003, TRY301
                     f"embedding model returned {len(result.vectors)} vectors for {len(texts)} texts"
                 )
         except asyncio.CancelledError:

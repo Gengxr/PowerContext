@@ -28,13 +28,102 @@ from powercontext.builtin.runtime.prepared_text import TRUST_POLICY
 _BEGIN_MARKER = "BEGIN_POWERCONTEXT_PREPARED_CONTEXT_V1"
 _END_MARKER = "END_POWERCONTEXT_PREPARED_CONTEXT_V1"
 _WORD = re.compile(r"[^\W_]+", re.UNICODE)
-_SENTENCE_END = re.compile(r"(?<=[.!?。！？;；])[\"')\]]*\s+|\n+")
-_STOPWORDS = frozenset(
-    """a an the and or but of to in on at by for from with as is are was were be been being it its this that these
-    those there their they them we our you your he she his her not no than then so such which who whom what when where
-    why how can could may might will would shall should do does did has have had into onto over under about between
-    during after before also only more most less very via per both either neither each other another same""".split()
-)
+_SENTENCE_END = re.compile(r"(?<=[.!?。！？;；])[\"')\]]*\s+|\n+")  # noqa: RUF001
+_STOPWORDS = frozenset([
+    "a",
+    "an",
+    "the",
+    "and",
+    "or",
+    "but",
+    "of",
+    "to",
+    "in",
+    "on",
+    "at",
+    "by",
+    "for",
+    "from",
+    "with",
+    "as",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "been",
+    "being",
+    "it",
+    "its",
+    "this",
+    "that",
+    "these",
+    "those",
+    "there",
+    "their",
+    "they",
+    "them",
+    "we",
+    "our",
+    "you",
+    "your",
+    "he",
+    "she",
+    "his",
+    "her",
+    "not",
+    "no",
+    "than",
+    "then",
+    "so",
+    "such",
+    "which",
+    "who",
+    "whom",
+    "what",
+    "when",
+    "where",
+    "why",
+    "how",
+    "can",
+    "could",
+    "may",
+    "might",
+    "will",
+    "would",
+    "shall",
+    "should",
+    "do",
+    "does",
+    "did",
+    "has",
+    "have",
+    "had",
+    "into",
+    "onto",
+    "over",
+    "under",
+    "about",
+    "between",
+    "during",
+    "after",
+    "before",
+    "also",
+    "only",
+    "more",
+    "most",
+    "less",
+    "very",
+    "via",
+    "per",
+    "both",
+    "either",
+    "neither",
+    "each",
+    "other",
+    "another",
+    "same",
+])
 # Adjacent sentences usually continue the same evidence and share one citation.
 _ADJACENT_BONUS = 0.35
 # Retrieval order is a strong relevance prior for which entry holds the evidence.
@@ -87,7 +176,7 @@ class _Sentence:
     terms: frozenset[str]
 
 
-def select_evidence(
+def select_evidence(  # noqa: C901
     query: str, candidates: Sequence[EvidenceCandidate], max_bytes: int
 ) -> tuple[str | None, tuple[SelectedSpan, ...]]:
     """Choose literal sentence spans relevant to ``query`` whose rendered context fits ``max_bytes``."""
@@ -284,7 +373,22 @@ def _terms(text: str) -> list[str]:
 
 
 def _stem(word: str) -> str:
-    for suffix in ("ations", "ation", "ments", "ment", "ness", "ings", "ing", "ies", "ied", "ers", "ed", "es", "ly", "s"):
+    for suffix in (
+        "ations",
+        "ation",
+        "ments",
+        "ment",
+        "ness",
+        "ings",
+        "ing",
+        "ies",
+        "ied",
+        "ers",
+        "ed",
+        "es",
+        "ly",
+        "s",
+    ):
         if word.endswith(suffix) and len(word) - len(suffix) >= 4:
             word = word[: -len(suffix)]
             break

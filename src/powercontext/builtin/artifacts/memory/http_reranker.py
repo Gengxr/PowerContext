@@ -62,7 +62,7 @@ class HTTPMemoryReranker:
         """Request scores for every candidate exactly once and select the top ``limit`` ranks."""
 
         if isinstance(limit, bool) or not isinstance(limit, int):
-            raise ValueError("rerank limit must be an integer")  # noqa: TRY003
+            raise ValueError("rerank limit must be an integer")  # noqa: TRY003, TRY004
         _validate_bounds(len(candidates), limit)
         scores: dict[int, float] = {}
         requests = 0
@@ -86,7 +86,7 @@ def _parse_scores(content: bytes, ranks: tuple[int, ...]) -> dict[int, float]:
     try:
         payload = json.loads(content)
     except (UnicodeDecodeError, json.JSONDecodeError) as error:
-        raise ValueError("reranker response must be valid JSON") from error
+        raise ValueError("reranker response must be valid JSON") from error  # noqa: TRY003
     if not isinstance(payload, dict) or set(payload) != {"scores"} or not isinstance(payload["scores"], list):
         raise ValueError("reranker response must contain exactly a scores list")  # noqa: TRY003
     expected = set(ranks)

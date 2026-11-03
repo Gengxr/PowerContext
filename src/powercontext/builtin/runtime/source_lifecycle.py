@@ -103,13 +103,15 @@ class ScopedSourceLifecycle:
 
         _require_node_id(node_id)
         if not isinstance(source_ref, SourceRef):
-            raise SourceLifecycleError("Source nodes require a SourceRef")
+            raise SourceLifecycleError("Source nodes require a SourceRef")  # noqa: TRY003
         if type(revision) is not int or revision < 1:
-            raise SourceLifecycleError("Source lifecycle revision must be a positive integer")
+            raise SourceLifecycleError("Source lifecycle revision must be a positive integer")  # noqa: TRY003
         try:
-            await self._runtime.records.for_scope(self.scope_id).get_source(source_ref.source_type, source_ref.source_id)
+            await self._runtime.records.for_scope(self.scope_id).get_source(
+                source_ref.source_type, source_ref.source_id
+            )
         except Exception as error:
-            raise SourceLifecycleError(f"Source {source_ref.source_id!r} is not readable") from error
+            raise SourceLifecycleError(f"Source {source_ref.source_id!r} is not readable") from error  # noqa: TRY003
         await self._register(node_id, "source", source_ref, (), None, revision)
 
     async def register_memory(
@@ -125,12 +127,12 @@ class ScopedSourceLifecycle:
 
         _require_node_id(node_id)
         if not isinstance(citation, MemoryCitation):
-            raise SourceLifecycleError("Memory nodes require a MemoryCitation")
+            raise SourceLifecycleError("Memory nodes require a MemoryCitation")  # noqa: TRY003
         parents = _validate_parents(node_id, parents, policy)
         try:
             await self._runtime.memory.for_scope(self.scope_id).get(GetMemoryEntryRequest(citation=citation))
         except Exception as error:
-            raise SourceLifecycleError(f"Memory entry {citation.entry_id!r} is not readable") from error
+            raise SourceLifecycleError(f"Memory entry {citation.entry_id!r} is not readable") from error  # noqa: TRY003
         if await self._register(node_id, "memory", citation, parents, policy, None):
             await self._synchronize_memory()
 
@@ -147,14 +149,14 @@ class ScopedSourceLifecycle:
 
         _require_node_id(node_id)
         if not isinstance(artifact, ArtifactRef) or artifact.family != "topic-memory":
-            raise SourceLifecycleError("Topic nodes require a topic-memory ArtifactRef")
+            raise SourceLifecycleError("Topic nodes require a topic-memory ArtifactRef")  # noqa: TRY003
         parents = _validate_parents(node_id, parents, policy)
         try:
             await self._runtime.records.for_scope(self.scope_id).get_artifact_revision(
                 artifact.family, artifact.artifact_id, artifact.revision
             )
         except Exception as error:
-            raise SourceLifecycleError(f"Topic Memory {artifact.artifact_id!r} is not readable") from error
+            raise SourceLifecycleError(f"Topic Memory {artifact.artifact_id!r} is not readable") from error  # noqa: TRY003
         await self._register(node_id, "topic", artifact, parents, policy, None)
 
     async def apply(self, event: SourceLifecycleEvent, /) -> list[str]:
@@ -165,7 +167,7 @@ class ScopedSourceLifecycle:
         """
 
         if not isinstance(event, SourceLifecycleEvent):
-            raise SourceLifecycleError("apply requires a SourceLifecycleEvent")
+            raise SourceLifecycleError("apply requires a SourceLifecycleEvent")  # noqa: TRY003
         async with (
             self._runtime._scoped_operation(self.scope_id),
             self._runtime._locked(self.scope_id),
@@ -174,15 +176,15 @@ class ScopedSourceLifecycle:
             nodes = await _load_nodes(connection, self.scope_id)
             node = nodes.get(event.node_id)
             if node is None or node.kind != "source":
-                raise SourceLifecycleError(f"unknown Source node {event.node_id!r}")
+                raise SourceLifecycleError(f"unknown Source node {event.node_id!r}")  # noqa: TRY003
             if event.revision != node.revision:
-                raise SourceLifecycleError("event revision does not match the Source lifecycle revision")
+                raise SourceLifecycleError("event revision does not match the Source lifecycle revision")  # noqa: TRY003
             last = node.last_event
             replay = last is not None and event.sequence == last.sequence
             if replay and event != last:
-                raise SourceLifecycleError("event sequence was already used by a different event")
+                raise SourceLifecycleError("event sequence was already used by a different event")  # noqa: TRY003
             if last is not None and event.sequence < last.sequence:
-                raise SourceLifecycleError("event sequence must increase")
+                raise SourceLifecycleError("event sequence must increase")  # noqa: TRY003
             if not replay:
                 await connection.execute(
                     _node_update(self.scope_id, node.node_id).values(
@@ -197,13 +199,13 @@ class ScopedSourceLifecycle:
         """Return the registered reference; ``generation`` requires the node to be available."""
 
         if purpose not in ("generation", "audit"):
-            raise SourceLifecycleError(f"unknown lifecycle purpose {purpose!r}")
+            raise SourceLifecycleError(f"unknown lifecycle purpose {purpose!r}")  # noqa: TRY003
         async with self._database().transaction() as connection:
             node = (await _load_nodes(connection, self.scope_id)).get(node_id)
         if node is None:
-            raise SourceLifecycleError(f"unknown lifecycle node {node_id!r}")
+            raise SourceLifecycleError(f"unknown lifecycle node {node_id!r}")  # noqa: TRY003
         if purpose == "generation" and not node.available:
-            raise SourceLifecycleError(f"lifecycle node {node_id!r} is not available for generation")
+            raise SourceLifecycleError(f"lifecycle node {node_id!r} is not available for generation")  # noqa: TRY003
         return node.reference
 
     async def available(self) -> list[str]:
@@ -241,12 +243,14 @@ class ScopedSourceLifecycle:
             existing = nodes.get(node_id)
             if existing is not None:
                 if existing.binding() != (kind, reference, parents, policy, revision):
-                    raise SourceLifecycleError(f"lifecycle node {node_id!r} is already bound differently")
+                    raise SourceLifecycleError(f"lifecycle node {node_id!r} is already bound differently")  # noqa: TRY003
                 return False
             missing = [parent for parent in parents if parent not in nodes]
             if missing:
-                raise SourceLifecycleError(f"unregistered parents {missing!r}")
-            available = True if kind == "source" else _supported(policy, [nodes[parent].available for parent in parents])
+                raise SourceLifecycleError(f"unregistered parents {missing!r}")  # noqa: TRY003
+            available = (
+                True if kind == "source" else _supported(policy, [nodes[parent].available for parent in parents])
+            )
             ordinal = int(
                 await connection.scalar(
                     select(func.max(SOURCE_LIFECYCLE_NODES_TABLE.c.ordinal)).where(
@@ -281,10 +285,14 @@ class ScopedSourceLifecycle:
         """
 
         runtime = self._runtime
-        async with runtime._context(self.scope_id, embedding_purpose=ModelUsagePurpose.MEMORY_INDEXING) as context:
+        async with runtime._context(self.scope_id, embedding_purpose=ModelUsagePurpose.MEMORY_INDEXING) as context:  # noqa: SIM117
             async with runtime._locked(self.scope_id):
                 async with self._database().transaction() as connection:
-                    nodes = [node for node in (await _load_nodes(connection, self.scope_id)).values() if node.kind == "memory"]
+                    nodes = [
+                        node
+                        for node in (await _load_nodes(connection, self.scope_id)).values()
+                        if node.kind == "memory"
+                    ]
                     for node in nodes:
                         if not node.available and not node.native_suppressed:
                             await connection.execute(
@@ -303,7 +311,9 @@ class ScopedSourceLifecycle:
                 memory = await service.head(context.artifacts.memory_artifact_id)
                 states = {item.entry_id: item.state for item in memory.content.manifest.entries}
                 entries = await service.entries(memory)
-                deactivate = [entry for entry in entries if entry.entry_id in withdraw and states[entry.entry_id] == "active"]
+                deactivate = [
+                    entry for entry in entries if entry.entry_id in withdraw and states[entry.entry_id] == "active"
+                ]
                 if deactivate:
                     memory = await service.forget(memory, entries=deactivate, reason=_REASON)
                 reactivate = [
@@ -322,7 +332,7 @@ class ScopedSourceLifecycle:
     def _database(self) -> AsyncDatabase:
         database = getattr(self._runtime._provider, "database", None)
         if database is None:
-            raise SourceLifecycleError("source lifecycle requires a relational Runtime")
+            raise SourceLifecycleError("source lifecycle requires a relational Runtime")  # noqa: TRY003
         return database
 
 
@@ -338,23 +348,23 @@ class SourceLifecycleApplication:
 
 def _require_node_id(node_id: object) -> None:
     if not isinstance(node_id, str) or not node_id.strip():
-        raise SourceLifecycleError("lifecycle node_id must be a non-blank string")
+        raise SourceLifecycleError("lifecycle node_id must be a non-blank string")  # noqa: TRY003
     if len(node_id) > SOURCE_LIFECYCLE_NODES_TABLE.c.node_id.type.length:
-        raise SourceLifecycleError("lifecycle node_id is too long")
+        raise SourceLifecycleError("lifecycle node_id is too long")  # noqa: TRY003
 
 
 def _validate_parents(node_id: str, parents: object, policy: object) -> tuple[str, ...]:
     if policy not in ("all", "any"):
-        raise SourceLifecycleError("lifecycle policy must be 'all' or 'any'")
+        raise SourceLifecycleError("lifecycle policy must be 'all' or 'any'")  # noqa: TRY003
     if not isinstance(parents, (tuple, list)) or not parents:
-        raise SourceLifecycleError("derived lifecycle nodes require at least one parent")
+        raise SourceLifecycleError("derived lifecycle nodes require at least one parent")  # noqa: TRY003
     parents = tuple(parents)
     if not all(isinstance(parent, str) and parent for parent in parents):
-        raise SourceLifecycleError("lifecycle parents must be node IDs")
+        raise SourceLifecycleError("lifecycle parents must be node IDs")  # noqa: TRY003
     if len(set(parents)) != len(parents):
-        raise SourceLifecycleError("lifecycle parents must not repeat")
+        raise SourceLifecycleError("lifecycle parents must not repeat")  # noqa: TRY003
     if node_id in parents:
-        raise SourceLifecycleError("lifecycle node cannot depend on itself")
+        raise SourceLifecycleError("lifecycle node cannot depend on itself")  # noqa: TRY003
     return parents
 
 
@@ -403,7 +413,9 @@ async def _load_nodes(connection: AsyncConnection, scope_id: str) -> dict[str, _
             revision=None if row["revision"] is None else int(row["revision"]),
             available=bool(row["available"]),
             native_suppressed=bool(row["native_suppressed"]),
-            last_event=None if row["last_event"] is None else SourceLifecycleEvent.model_validate_json(row["last_event"]),
+            last_event=None
+            if row["last_event"] is None
+            else SourceLifecycleEvent.model_validate_json(row["last_event"]),
         )
     return nodes
 

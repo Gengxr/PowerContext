@@ -90,7 +90,7 @@ def csv_row_source_id(document_id: str, primary_key_value: str) -> str:
     return identity
 
 
-def parse_csv_document(value: CSVDocumentInput) -> tuple[CSVRowInput, ...]:
+def parse_csv_document(value: CSVDocumentInput) -> tuple[CSVRowInput, ...]:  # noqa: C901
     """Parse and validate a whole document before returning any row."""
 
     _validate_document_id(value.document_id)
@@ -99,11 +99,11 @@ def parse_csv_document(value: CSVDocumentInput) -> tuple[CSVRowInput, ...]:
     try:
         text = value.content.decode("utf-8-sig")
     except UnicodeDecodeError as error:
-        raise ValueError("CSV document must be valid UTF-8") from error
+        raise ValueError("CSV document must be valid UTF-8") from error  # noqa: TRY003
     try:
         records = list(csv.reader(io.StringIO(text, newline=""), strict=True))
     except csv.Error as error:
-        raise ValueError(f"malformed CSV document: {error}") from error
+        raise ValueError(f"malformed CSV document: {error}") from error  # noqa: TRY003
     if not records or not records[0]:
         raise ValueError("CSV document must start with a header")  # noqa: TRY003
 

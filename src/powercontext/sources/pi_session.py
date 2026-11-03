@@ -91,7 +91,7 @@ def pi_event_source_id(session_id: str, event_id: str) -> str:
     return f"pi-sha256:{digest}"
 
 
-def parse_pi_session(value: PiSessionInput) -> tuple[PiEventInput, ...]:
+def parse_pi_session(value: PiSessionInput) -> tuple[PiEventInput, ...]:  # noqa: C901
     """Return the visible events from root to the selected leaf, or fail atomically."""
 
     records = _decode_records(value.content)
@@ -110,7 +110,7 @@ def parse_pi_session(value: PiSessionInput) -> tuple[PiEventInput, ...]:
         if node_id in nodes:
             raise ValueError(f"duplicate Pi session entry {node_id!r}")  # noqa: TRY003
         if not isinstance(record.get("type"), str):
-            raise ValueError(f"Pi session entry {node_id!r} requires a type")  # noqa: TRY003
+            raise ValueError(f"Pi session entry {node_id!r} requires a type")  # noqa: TRY003, TRY004
         if "parentId" not in record:
             raise ValueError(f"Pi session entry {node_id!r} requires parentId")  # noqa: TRY003
         parent_id = record["parentId"]
@@ -159,7 +159,7 @@ def _decode_records(content: bytes) -> list[dict[str, Any]]:
     try:
         text = content.decode("utf-8-sig")
     except UnicodeDecodeError as error:
-        raise ValueError("Pi session must be valid UTF-8") from error
+        raise ValueError("Pi session must be valid UTF-8") from error  # noqa: TRY003
     records: list[dict[str, Any]] = []
     for line in text.splitlines():
         if not line.strip():
@@ -167,9 +167,9 @@ def _decode_records(content: bytes) -> list[dict[str, Any]]:
         try:
             record = json.loads(line)
         except json.JSONDecodeError as error:
-            raise ValueError(f"invalid Pi session JSON: {error}") from error
+            raise ValueError(f"invalid Pi session JSON: {error}") from error  # noqa: TRY003
         if not isinstance(record, dict):
-            raise ValueError("Pi session records must be JSON objects")  # noqa: TRY003
+            raise ValueError("Pi session records must be JSON objects")  # noqa: TRY003, TRY004
         records.append(record)
     if not records:
         raise ValueError("Pi session is empty")  # noqa: TRY003
@@ -217,11 +217,11 @@ def _text_body(content: object, *, tool_calls: bool = False) -> str:
     if isinstance(content, str):
         return content
     if not isinstance(content, list):
-        raise ValueError("Pi message content must be a string or a list of blocks")  # noqa: TRY003
+        raise ValueError("Pi message content must be a string or a list of blocks")  # noqa: TRY003, TRY004
     parts: list[str] = []
     for block in content:
         if not isinstance(block, dict):
-            raise ValueError("Pi content blocks must be JSON objects")  # noqa: TRY003
+            raise ValueError("Pi content blocks must be JSON objects")  # noqa: TRY003, TRY004
         block_type = block.get("type")
         if block_type == "text":
             parts.append(_string(block.get("text")))
@@ -237,7 +237,7 @@ def _string(value: object) -> str:
     if value is None:
         return ""
     if not isinstance(value, str):
-        raise ValueError("Pi visible text fields must be strings")  # noqa: TRY003
+        raise ValueError("Pi visible text fields must be strings")  # noqa: TRY003, TRY004
     return value
 
 

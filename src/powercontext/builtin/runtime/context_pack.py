@@ -55,7 +55,7 @@ class ContextPack:
         """Chunk ``content`` deterministically at line ends and UTF-8 character boundaries."""
 
         if not isinstance(content, str):
-            raise ContextPackError("content must be a string")
+            raise ContextPackError("content must be a string")  # noqa: TRY003
         return cls(_chunk(content, chunk_bytes))
 
     @property
@@ -81,10 +81,10 @@ class ContextPack:
         payload = _load_object(data, _PACK_FIELDS, PACK_SCHEMA)
         pack = cls(_decode_items(payload["items"], "items"))
         if payload["digest"] != pack.digest:
-            raise ContextPackError("pack digest does not match its items")
+            raise ContextPackError("pack digest does not match its items")  # noqa: TRY003
         byte_count = payload["byte_count"]
         if not _is_int(byte_count) or byte_count != pack.byte_count:
-            raise ContextPackError("pack byte_count does not match its encoding")
+            raise ContextPackError("pack byte_count does not match its encoding")  # noqa: TRY003
         return pack
 
 
@@ -101,9 +101,9 @@ class ContextPackDelta:
         for field in ("base_digest", "target_digest"):
             value = getattr(self, field)
             if not isinstance(value, str) or not _DIGEST.fullmatch(value):
-                raise ContextPackError(f"{field} must be a sha256 digest")
+                raise ContextPackError(f"{field} must be a sha256 digest")  # noqa: TRY003
         if not _is_int(self.prefix_items) or self.prefix_items < 0:
-            raise ContextPackError("prefix_items must be a non-negative integer")
+            raise ContextPackError("prefix_items must be a non-negative integer")  # noqa: TRY003
         _validate_items(self.appended, "appended")
 
     @classmethod
@@ -147,14 +147,14 @@ def apply_context_pack_delta(base: ContextPack, delta: ContextPackDelta) -> Cont
     """Rebuild the target pack from a base pack and a delta, verifying both digests."""
 
     if not isinstance(base, ContextPack) or not isinstance(delta, ContextPackDelta):
-        raise ContextPackError("apply requires a ContextPack and a ContextPackDelta")
+        raise ContextPackError("apply requires a ContextPack and a ContextPackDelta")  # noqa: TRY003
     if base.digest != delta.base_digest:
-        raise ContextPackError("delta base digest does not match the base pack")
+        raise ContextPackError("delta base digest does not match the base pack")  # noqa: TRY003
     if delta.prefix_items > len(base.items):
-        raise ContextPackError("delta prefix exceeds the base pack")
+        raise ContextPackError("delta prefix exceeds the base pack")  # noqa: TRY003
     target = ContextPack(base.items[: delta.prefix_items] + delta.appended)
     if target.digest != delta.target_digest:
-        raise ContextPackError("rebuilt pack does not match the delta target digest")
+        raise ContextPackError("rebuilt pack does not match the delta target digest")  # noqa: TRY003
     return target
 
 
@@ -175,7 +175,7 @@ def aligned_pack(base: ContextPack, content: str, *, chunk_bytes: int = DEFAULT_
 
 def _chunk(content: str, chunk_bytes: int) -> tuple[bytes, ...]:
     if not _is_int(chunk_bytes) or chunk_bytes < 1:
-        raise ContextPackError("chunk_bytes must be a positive integer")
+        raise ContextPackError("chunk_bytes must be a positive integer")  # noqa: TRY003
     chunks: list[bytes] = []
     for line in content.splitlines(keepends=True):
         encoded = line.encode("utf-8")
@@ -184,7 +184,7 @@ def _chunk(content: str, chunk_bytes: int) -> tuple[bytes, ...]:
             while cut > 0 and (encoded[cut] & 0xC0) == 0x80:
                 cut -= 1
             if cut == 0:
-                raise ContextPackError("chunk_bytes is smaller than one UTF-8 character")
+                raise ContextPackError("chunk_bytes is smaller than one UTF-8 character")  # noqa: TRY003
             chunks.append(encoded[:cut])
             encoded = encoded[cut:]
         if encoded:
@@ -194,14 +194,14 @@ def _chunk(content: str, chunk_bytes: int) -> tuple[bytes, ...]:
 
 def _validate_items(items: object, field: str) -> None:
     if not isinstance(items, tuple):
-        raise ContextPackError(f"{field} must be a tuple of bytes")
+        raise ContextPackError(f"{field} must be a tuple of bytes")  # noqa: TRY003
     for item in items:
         if not isinstance(item, bytes):
-            raise ContextPackError(f"{field} must contain bytes")
+            raise ContextPackError(f"{field} must contain bytes")  # noqa: TRY003
         try:
             item.decode("utf-8")
         except UnicodeDecodeError as error:
-            raise ContextPackError(f"{field} must contain valid UTF-8 chunks") from error
+            raise ContextPackError(f"{field} must contain valid UTF-8 chunks") from error  # noqa: TRY003
 
 
 def _encode_items(items: tuple[bytes, ...]) -> list[str]:
@@ -210,17 +210,17 @@ def _encode_items(items: tuple[bytes, ...]) -> list[str]:
 
 def _decode_items(values: object, field: str) -> tuple[bytes, ...]:
     if not isinstance(values, list):
-        raise ContextPackError(f"{field} must be a list of Base64 strings")
+        raise ContextPackError(f"{field} must be a list of Base64 strings")  # noqa: TRY003
     items: list[bytes] = []
     for value in values:
         if not isinstance(value, str):
-            raise ContextPackError(f"{field} must be a list of Base64 strings")
+            raise ContextPackError(f"{field} must be a list of Base64 strings")  # noqa: TRY003
         try:
             item = base64.b64decode(value.encode("ascii"), validate=True)
         except (UnicodeEncodeError, binascii.Error) as error:
-            raise ContextPackError(f"{field} contains invalid Base64") from error
+            raise ContextPackError(f"{field} contains invalid Base64") from error  # noqa: TRY003
         if base64.b64encode(item).decode("ascii") != value:
-            raise ContextPackError(f"{field} contains non-canonical Base64")
+            raise ContextPackError(f"{field} contains non-canonical Base64")  # noqa: TRY003
         items.append(item)
     return tuple(items)
 
@@ -245,15 +245,15 @@ def _with_self_count(payload: dict[str, object]) -> bytes:
 
 def _load_object(data: bytes, fields: frozenset[str], schema: str) -> dict[str, object]:
     if not isinstance(data, (bytes, bytearray)):
-        raise ContextPackError("serialized payload must be bytes")
+        raise ContextPackError("serialized payload must be bytes")  # noqa: TRY003
     try:
         payload = json.loads(bytes(data).decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as error:
-        raise ContextPackError("serialized payload must be UTF-8 JSON") from error
+        raise ContextPackError("serialized payload must be UTF-8 JSON") from error  # noqa: TRY003
     if not isinstance(payload, dict) or set(payload) != fields:
-        raise ContextPackError(f"payload must contain exactly {sorted(fields)}")
+        raise ContextPackError(f"payload must contain exactly {sorted(fields)}")  # noqa: TRY003
     if payload["schema"] != schema:
-        raise ContextPackError(f"payload schema must be {schema}")
+        raise ContextPackError(f"payload schema must be {schema}")  # noqa: TRY003
     return payload
 
 

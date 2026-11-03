@@ -968,9 +968,7 @@ async def open_builtin_contexts(
     index = (
         CompositeMemoryIndex(OceanBaseMemoryFTSIndex())
         if embedding_model is None
-        else OceanBaseHybridMemoryIndex(
-            OceanBaseMemoryFTSIndex(), OceanBaseMemoryVectorIndex(embedding_model.profile)
-        )
+        else OceanBaseHybridMemoryIndex(OceanBaseMemoryFTSIndex(), OceanBaseMemoryVectorIndex(embedding_model.profile))
     )
     topic_indexes: list[TopicMemoryIndex] = [OceanBaseTopicMemoryFTSIndex()]
     if embedding_model is not None:

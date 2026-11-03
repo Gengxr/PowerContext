@@ -168,7 +168,6 @@ from powercontext.builtin.runtime._scope_cache import (
 )
 from powercontext.builtin.runtime.context_pack import ContextPack, ContextPackDelta, ContextPackError, aligned_pack
 from powercontext.builtin.runtime.decision_model import DecisionModel
-from powercontext.builtin.runtime.source_lifecycle import SourceLifecycleApplication
 from powercontext.builtin.runtime.errors import InvalidRuntimeRequestError, TopicMemoryProcessingUnavailableError
 from powercontext.builtin.runtime.models import (
     ApproveArtifactCandidateRequest,
@@ -250,6 +249,7 @@ from powercontext.builtin.runtime.recall_sufficiency import (
     build_recall_candidates,
     recall_effort,
 )
+from powercontext.builtin.runtime.source_lifecycle import SourceLifecycleApplication
 from powercontext.builtin.runtime.statistics import RelationalScopedStatistics, overview_selection
 from powercontext.builtin.scope import ScopeApplication, ScopeDescriptor, ScopeSelection
 from powercontext.builtin.scope.subject_sources import SubjectSourceService
@@ -865,7 +865,7 @@ class ScopedContextApplication:
         """
 
         if base_pack is not None and not isinstance(base_pack, ContextPack):
-            raise ContextPackError("base_pack must be a ContextPack")
+            raise ContextPackError("base_pack must be a ContextPack")  # noqa: TRY003
         prepared = await self.prepare(request, authorize_scopes=authorize_scopes)
         content = prepared.content or ""
         if base_pack is None:
