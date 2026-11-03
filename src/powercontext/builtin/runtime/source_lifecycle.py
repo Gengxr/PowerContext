@@ -218,6 +218,9 @@ class ScopedSourceLifecycle:
     async def suppressed_topic_artifacts(self) -> frozenset[str]:
         """Return Topic Memory artifact IDs registered only by unavailable nodes."""
 
+        if getattr(self._runtime._provider, "database", None) is None:
+            # Without relational storage no lifecycle node can have been registered.
+            return frozenset()
         async with self._database().transaction() as connection:
             nodes = await _load_nodes(connection, self.scope_id)
         topics = [node for node in nodes.values() if node.kind == "topic"]
