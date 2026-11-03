@@ -166,6 +166,7 @@ from powercontext.builtin.runtime._scope_cache import (
     ScopeCacheObserver,
     ScopeEvictor,
 )
+from powercontext.builtin.runtime.context_pack import ContextPack, ContextPackDelta, ContextPackError, aligned_pack
 from powercontext.builtin.runtime.decision_model import DecisionModel
 from powercontext.builtin.runtime.errors import InvalidRuntimeRequestError, TopicMemoryProcessingUnavailableError
 from powercontext.builtin.runtime.models import (
@@ -846,6 +847,29 @@ class ScopedContextApplication:
             if authorize_scopes is not None:
                 await authorize_scopes((self.scope_id, *scope.context_references))
             return await self._prepare(request, scope)
+
+    async def prepare_incremental(
+        self,
+        request: PrepareContextRequest,
+        /,
+        base_pack: ContextPack | None = None,
+        *,
+        authorize_scopes: Callable[[tuple[str, ...]], Awaitable[None]] | None = None,
+    ) -> ContextPack | ContextPackDelta:
+        """Prepare context as a full pack, or as a delta against a pack the receiver holds.
+
+        The target body is exactly what ``prepare`` returns; an empty result is an empty pack.
+        Leading chunks of ``base_pack`` that the new body still starts with are reused so the
+        delta only carries the changed suffix.
+        """
+
+        if base_pack is not None and not isinstance(base_pack, ContextPack):
+            raise ContextPackError("base_pack must be a ContextPack")
+        prepared = await self.prepare(request, authorize_scopes=authorize_scopes)
+        content = prepared.content or ""
+        if base_pack is None:
+            return ContextPack.from_content(content)
+        return ContextPackDelta.between(base_pack, aligned_pack(base_pack, content))
 
     async def _prepare(self, request: PrepareContextRequest, scope: ScopeDescriptor, /) -> PreparedContext:
         build, effort = await self._prepare_build(request, scope)
