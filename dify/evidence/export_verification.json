@@ -1,0 +1,14 @@
+{
+  "dify_published_version": 2,
+  "source_cloud_export": "明日失物招领处 (1).ifpkg",
+  "normalization": "Only opening_statement copied from verified published version 2 UI; business graph unchanged",
+  "dsl_version": "0.7.0",
+  "node_count": 11,
+  "secret_excluded": true,
+  "opening_statement_present": true,
+  "source_graph_sha256": "7555759f76ba06d34b94a5094fe8b0aba7d1ab5add1c216aaf00a92c1fe3774a",
+  "final_graph_sha256": "7555759f76ba06d34b94a5094fe8b0aba7d1ab5add1c216aaf00a92c1fe3774a",
+  "app_yaml_sha256": "6484364ec4812ba658a7b3ae285f1088e124194b469507ede5817bc9410dc346",
+  "package_sha256": "5139f34011fa987f4bea5439b5d3fe48c1cfb0b66738d85dacedaca176ff6fcc",
+  "public_url": "https://udify.app/chat/6X83sMj42azMRYaC"
+}

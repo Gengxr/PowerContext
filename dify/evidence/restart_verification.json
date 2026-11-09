@@ -1,0 +1,63 @@
+{
+  "verified_at": "2026-11-09T04:18:35.533094+00:00",
+  "passed": true,
+  "passport": "proof-ff7f92912a0f405b8e67ca19236bc655",
+  "before_pid": 66554,
+  "after_pid": 70863,
+  "state_and_events_identical": true,
+  "event_count": 5,
+  "database": {
+    "engine": "seekdb",
+    "version": "5.7.25-OceanBase seekdb-v1.4.0.0",
+    "cases": 3
+  },
+  "restored_output": {
+    "view": {
+      "title": "一张明天才会遗失的旧车票",
+      "message": "已从档案柜取回当前记录。相同通行证在新会话中也可找回这份档案。",
+      "claimants": {
+        "A": "站长阿澈",
+        "B": "录音师小满",
+        "C": "修钟匠老许"
+      },
+      "timeline": 1,
+      "coins": 1,
+      "turn": 5,
+      "clue_names": [
+        "票面暗纹",
+        "闸机的未来记录",
+        "站内广播底稿"
+      ],
+      "clues": [
+        {
+          "timeline": 0,
+          "number": 2,
+          "text": "闸机将在明日12:00记录小满持M-17车票进站，阿澈不离值班台，老许的预约是下午。",
+          "current": false
+        },
+        {
+          "timeline": 1,
+          "number": 2,
+          "text": "列车延后一分钟，阿澈将持A-01车票下站台接人；小满改为在站外录音，老许仍在钟铺。",
+          "current": true
+        }
+      ],
+      "finished": true,
+      "ending": {
+        "kind": "returned",
+        "chosen": "A",
+        "correct": "A",
+        "text": "阿澈把车票夹进帽檐。那一分钟让站台多等到一个人。柜台收到了明天的回信：谢谢你没有沿用昨天的答案。"
+      }
+    },
+    "ledger": "【档案回执】一张明天才会遗失的旧车票\n时间线：1；明日币：1；已登记变化：5次\n认领人：A 站长阿澈 / B 录音师小满 / C 修钟匠老许\n线索目录：1 票面暗纹 / 2 闸机的未来记录 / 3 站内广播底稿\n线索2〔时间线0，旧时间线，仅供历史参考〕：闸机将在明日12:00记录小满持M-17车票进站，阿澈不离值班台，老许的预约是下午。\n线索2〔时间线1，当前〕：列车延后一分钟，阿澈将持A-01车票下站台接人；小满改为在站外录音，老许仍在钟铺。\n结案：阿澈把车票夹进帽檐。那一分钟让站台多等到一个人。柜台收到了明天的回信：谢谢你没有沿用昨天的答案。\n本时间线的失主：站长阿澈\n可用指令：状态 / 帮助",
+    "narration_context": "{\"title\": \"一张明天才会遗失的旧车票\", \"message\": \"已从档案柜取回当前记录。相同通行证在新会话中也可找回这份档案。\", \"claimants\": {\"A\": \"站长阿澈\", \"B\": \"录音师小满\", \"C\": \"修钟匠老许\"}, \"timeline\": 1, \"coins\": 1, \"turn\": 5, \"clue_names\": [\"票面暗纹\", \"闸机的未来记录\", \"站内广播底稿\"], \"clues\": [{\"timeline\": 0, \"number\": 2, \"text\": \"闸机将在明日12:00记录小满持M-17车票进站，阿澈不离值班台，老许的预约是下午。\", \"current\": false}, {\"timeline\": 1, \"number\": 2, \"text\": \"列车延后一分钟，阿澈将持A-01车票下站台接人；小满改为在站外录音，老许仍在钟铺。\", \"current\": true}], \"finished\": true, \"ending\": {\"kind\": \"returned\", \"chosen\": \"A\", \"correct\": \"A\", \"text\": \"阿澈把车票夹进帽檐。那一分钟让站台多等到一个人。柜台收到了明天的回信：谢谢你没有沿用昨天的答案。\"}}",
+    "receipt": {
+      "session": "455d47548dc77bdd",
+      "turn": 5,
+      "timeline": 1,
+      "request_id": "73125f3fce05490483803bc42294a30a"
+    }
+  },
+  "state_sha256": "12b8188058a8424e74979d88bd9aeb551d599edb14be677d5b1ebbaafc60741e"
+}
