@@ -1,0 +1,18 @@
+{
+  "completed": [
+    "ingest",
+    "context",
+    "code_change",
+    "target_tests",
+    "regression_tests"
+  ],
+  "todo": [
+    "review spec v2"
+  ],
+  "code_sha256": "2e023dd4f96ac1232f68df2d40891605512b81b4bce007608b099ff6bd6eec4d",
+  "validation": {
+    "target_exit": 0,
+    "regression_exit": 0
+  },
+  "minimax_used": false
+}

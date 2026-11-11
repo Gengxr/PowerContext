@@ -1,0 +1,30 @@
+{
+  "task": "ticket-status",
+  "objective": "Add exact ticket status filtering. Preserve ordering, fields, empty-input behavior and input immutability.",
+  "sources": [
+    {
+      "id": "ticket-spec",
+      "kind": "spec",
+      "path": "specs/tickets.md",
+      "symbol": "SDD-001 / SDD-002 / SDD-003"
+    },
+    {
+      "id": "ticket-code",
+      "kind": "code",
+      "path": "before/tickets.py",
+      "symbol": "list_tickets"
+    },
+    {
+      "id": "ticket-tests",
+      "kind": "test",
+      "path": "tests/test_tickets.py",
+      "symbol": "TargetTests / RegressionTests"
+    },
+    {
+      "id": "ticket-data",
+      "kind": "data",
+      "path": "data.json",
+      "symbol": "initial tickets"
+    }
+  ]
+}

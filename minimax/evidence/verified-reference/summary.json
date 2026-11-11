@@ -1,0 +1,9 @@
+{
+  "mode": "reference",
+  "engineering_checks": "passed",
+  "minimax_actual_participation": "BLOCKED_NO_API_KEY",
+  "submission_ready": false,
+  "after_sha256": "2e023dd4f96ac1232f68df2d40891605512b81b4bce007608b099ff6bd6eec4d",
+  "fixed_tests_sha256": "624a0d8cac580e80d27641810b5936f0cfee42fc939338b7925ce79710aa2b84",
+  "note": "Reference mode is not a complete competition submission."
+}

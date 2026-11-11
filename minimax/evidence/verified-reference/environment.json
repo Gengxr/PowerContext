@@ -1,0 +1,12 @@
+{
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "mode": "reference",
+  "packages": {
+    "powercontext": "0.0.0",
+    "pyseekdb": "1.4.0.post1",
+    "pylibseekdb": "1.4.0.post2",
+    "SQLAlchemy": "2.1.8",
+    "httpx": "0.28.1"
+  },
+  "powercontext_commit": "cc752d8accb0bc4ffade2d4b84ef6e48206e122d"
+}

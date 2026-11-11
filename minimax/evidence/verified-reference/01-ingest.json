@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/home/test/minimax-venv/bin/python",
+    "-m",
+    "sdd",
+    "ingest",
+    "--source",
+    "/mnt/d/seekdb/minimax/evidence/verified-reference/input",
+    "--runtime",
+    "/home/test/.cache/minimax-sdd/verified-reference"
+  ],
+  "exit_code": 0,
+  "stdout": "{\n  \"operation\": \"seekdb.upsert\",\n  \"task\": \"ticket-status\",\n  \"sources\": [\n    {\n      \"id\": \"ticket-spec\",\n      \"kind\": \"spec\",\n      \"path\": \"specs/tickets.md\",\n      \"symbol\": \"SDD-001 / SDD-002 / SDD-003\",\n      \"sha256\": \"c27e2998b020bf09fced1a7ef445e35996528b9605d934f34202678d349b3470\",\n      \"task\": \"ticket-status\"\n    },\n    {\n      \"id\": \"ticket-code\",\n      \"kind\": \"code\",\n      \"path\": \"before/tickets.py\",\n      \"symbol\": \"list_tickets\",\n      \"sha256\": \"605d5d7f6040c70b6f7e22d41d3411eeb11ef8cdb6a0473f24143a54d6865d9c\",\n      \"task\": \"ticket-status\"\n    },\n    {\n      \"id\": \"ticket-tests\",\n      \"kind\": \"test\",\n      \"path\": \"tests/test_tickets.py\",\n      \"symbol\": \"TargetTests / RegressionTests\",\n      \"sha256\": \"624a0d8cac580e80d27641810b5936f0cfee42fc939338b7925ce79710aa2b84\",\n      \"task\": \"ticket-status\"\n    },\n    {\n      \"id\": \"ticket-data\",\n      \"kind\": \"data\",\n      \"path\": \"data.json\",\n      \"symbol\": \"initial tickets\",\n      \"sha256\": \"4c84f66cee585aa802dc2656737d9ce6eec901c768a09286cc8bcc05aa20ebae\",\n      \"task\": \"ticket-status\"\n    }\n  ]\n}\n",
+  "stderr": "",
+  "time_utc": "2026-11-11T07:50:53.630065+00:00"
+}

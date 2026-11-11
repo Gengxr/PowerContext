@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/home/test/minimax-venv/bin/python",
+    "-m",
+    "sdd",
+    "save",
+    "--source",
+    "/mnt/d/seekdb/minimax/evidence/verified-reference/input",
+    "--runtime",
+    "/home/test/.cache/minimax-sdd/verified-reference",
+    "--state-file",
+    "/mnt/d/seekdb/minimax/evidence/verified-reference/progress.json"
+  ],
+  "exit_code": 0,
+  "stdout": "{\n  \"operation\": \"powercontext.add\",\n  \"ref\": {\n    \"source_type\": \"content\",\n    \"source_id\": \"66868b8d-74fa-49eb-b2db-29e638d3e4cb\"\n  },\n  \"journal_position\": 1,\n  \"state\": {\n    \"completed\": [\n      \"ingest\",\n      \"context\",\n      \"code_change\",\n      \"target_tests\",\n      \"regression_tests\"\n    ],\n    \"todo\": [\n      \"review spec v2\"\n    ],\n    \"code_sha256\": \"2e023dd4f96ac1232f68df2d40891605512b81b4bce007608b099ff6bd6eec4d\",\n    \"validation\": {\n      \"target_exit\": 0,\n      \"regression_exit\": 0\n    },\n    \"minimax_used\": false\n  }\n}\n",
+  "stderr": "",
+  "time_utc": "2026-11-11T07:51:00.919241+00:00"
+}

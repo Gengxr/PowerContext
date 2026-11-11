@@ -1,0 +1,8 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.runtime/
+evidence/reference/
+evidence/reference2/
+evidence/reference-final/

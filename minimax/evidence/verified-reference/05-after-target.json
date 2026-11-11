@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/home/test/minimax-venv/bin/python",
+    "-m",
+    "unittest",
+    "-v",
+    "test_tickets.TargetTests"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_closed (test_tickets.TargetTests.test_closed) ... ok\ntest_empty_invalid (test_tickets.TargetTests.test_empty_invalid) ... ok\ntest_invalid (test_tickets.TargetTests.test_invalid) ... ok\ntest_open (test_tickets.TargetTests.test_open) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+  "time_utc": "2026-11-11T07:50:58.657349+00:00",
+  "code_sha256": "2e023dd4f96ac1232f68df2d40891605512b81b4bce007608b099ff6bd6eec4d",
+  "tests_sha256": "624a0d8cac580e80d27641810b5936f0cfee42fc939338b7925ce79710aa2b84"
+}

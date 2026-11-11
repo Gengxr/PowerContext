@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/home/test/minimax-venv/bin/python",
+    "-m",
+    "unittest",
+    "-v",
+    "test_tickets.RegressionTests"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_default_order_and_fields (test_tickets.RegressionTests.test_default_order_and_fields) ... ok\ntest_empty (test_tickets.RegressionTests.test_empty) ... ok\ntest_filtered_fields (test_tickets.RegressionTests.test_filtered_fields) ... ok\ntest_no_mutation (test_tickets.RegressionTests.test_no_mutation) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+  "time_utc": "2026-11-11T07:50:58.149398+00:00",
+  "code_sha256": "605d5d7f6040c70b6f7e22d41d3411eeb11ef8cdb6a0473f24143a54d6865d9c",
+  "tests_sha256": "624a0d8cac580e80d27641810b5936f0cfee42fc939338b7925ce79710aa2b84"
+}

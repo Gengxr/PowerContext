@@ -1,0 +1,11 @@
+--- before/tickets.py
++++ after/tickets.py
+@@ -1,3 +1,6 @@
+-"""Small in-memory ticket query service; initial version lacks status filtering."""
++"""Human-authored reference, NOT a MiniMax generation record."""
+ def list_tickets(rows, status=None):
+-    return [dict(row) for row in sorted(rows, key=lambda row: row["id"])]
++    if status is not None and status not in {"open", "closed"}:
++        raise ValueError("unsupported status")
++    selected = rows if status is None else [row for row in rows if row["status"] == status]
++    return [dict(row) for row in sorted(selected, key=lambda row: row["id"])]

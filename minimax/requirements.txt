@@ -1,0 +1,8 @@
+powercontext[builtin] @ git+https://github.com/oceanbase/powercontext.git@cc752d8accb0bc4ffade2d4b84ef6e48206e122d
+pyseekdb==1.4.0.post1
+aiosqlite==0.22.1
+SQLAlchemy[asyncio]==2.1.8
+alembic>=1.16,<2
+httpx==0.28.1
+python-dotenv==1.2.4
+pylibseekdb==1.4.0.post2
