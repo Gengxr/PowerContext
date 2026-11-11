@@ -1,0 +1,38 @@
+{
+  "started": "2026-11-11T08:42:05.801Z",
+  "kind": "synthetic database transport only, NOT browser inference or performance evidence",
+  "node": "v20.19.5",
+  "collection": "kb_smoke_1794386525802",
+  "inserted": {
+    "count": 1,
+    "writeMs": 577.9061999999976,
+    "refreshMs": 433.95010000000184
+  },
+  "found": {
+    "results": {
+      "ids": [
+        [
+          "smoke"
+        ]
+      ],
+      "distances": [
+        [
+          0.0328
+        ]
+      ],
+      "documents": [
+        [
+          "seekdb database transport smoke test"
+        ]
+      ],
+      "metadatas": [
+        [
+          {
+            "source": "smoke"
+          }
+        ]
+      ]
+    },
+    "searchMs": 106.04910000000382
+  }
+}

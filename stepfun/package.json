@@ -1,0 +1,1 @@
+{"name":"stepfun-local-kb","private":true,"type":"module","scripts":{"start":"node server.mjs","build":"vite build web --outDir ../dist"},"dependencies":{"seekdb":"1.4.0","@huggingface/transformers":"3.8.1","express":"4.21.2","vite":"6.1.0"}}
