@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学习回顾台 · OceanBase 2026 生态赛 Qoder 赛题</title>
+<meta name="description" content="学习回顾台：基于真实 PowerContext 的薄弱知识点管理、确定性复习调度与跨进程状态恢复。OceanBase 2026 生态赛 Qoder 赛题作品展示。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>学习回顾台</div>
+    <nav class="links">
+      <a href="#pain">痛点</a>
+      <a href="#features">功能</a>
+      <a href="#shots">截图</a>
+      <a href="#rules">规则</a>
+      <a href="#tech">技术</a>
+      <a href="#try">安装体验</a>
+      <a href="#verified">验证与限制</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <span class="eyebrow">OceanBase 2026 生态赛 · Qoder 赛题作品</span>
+    <h1>学习回顾台</h1>
+    <p class="lede">面向学生的薄弱知识点管理、复习调度与学习记录工具。把「该复习什么、复习得怎样、下次何时复习」交给可解释的确定性规则与真实 PowerContext 持久化，减少每次重新整理学习状态的时间。</p>
+    <p style="margin-top:calc(20px * var(--site-space,1));display:flex;gap:12px;flex-wrap:wrap;">
+      <a class="btn" href="https://github.com/Gengxr/PowerContext/tree/qoder-study-review" target="_blank" rel="noopener">GitHub 分支 qoder-study-review</a>
+      <a class="btn ghost" href="#try">本地安装与体验</a>
+    </p>
+  </div>
+
+  <section id="pain">
+    <h2>真实痛点与目标用户</h2>
+    <p class="sub">目标用户：需要长期巩固薄弱知识点的大学生与自学者。</p>
+    <div class="grid cols-3">
+      <div class="card"><span class="tag">痛点 1</span><h3>状态散落、每次重理</h3><p>笔记、错题、复习计划分散在纸张与多个 App，每次开始学习都要重新整理「哪些还没掌握」，耗时且易漏。</p></div>
+      <div class="card"><span class="tag">痛点 2</span><h3>复习时机靠感觉</h3><p>没有明确的到期与优先级规则，要么反复复习已会的内容，要么遗漏真正薄弱的知识点。</p></div>
+      <div class="card"><span class="tag">痛点 3</span><h3>换设备/重启即丢失</h3><p>进度与偏好存在本地临时状态里，关闭应用或更换环境后难以恢复，学习连续性被打断。</p></div>
+    </div>
+  </section>
+
+  <section id="features">
+    <h2>核心功能</h2>
+    <p class="sub">全部功能已在真实浏览器与真实 PowerContext 上验证（见下文截图与验证清单）。</p>
+    <div class="grid cols-3">
+      <div class="card"><h3>多学习者隔离</h3><p>创建/选择学习者，每人一个 PowerContext Scope，数据完全隔离，互不可见。</p></div>
+      <div class="card"><h3>知识点管理</h3><p>课程、标题、笔记、掌握程度；支持添加、编辑、删除（删除同时归档复习记录）。</p></div>
+      <div class="card"><h3>待复习优先级</h3><p>按公开确定性规则排序：逾期天数 → 掌握程度 → 到期时间 → 标题码点序，可解释。</p></div>
+      <div class="card"><h3>复习记录与调度</h3><p>记录「需要加强/基本掌握/已掌握」，按规则更新间隔与下次复习时间，留存 Source 证据。</p></div>
+      <div class="card"><h3>偏好与进度保存</h3><p>每日目标、即将到期窗口、当前选中学习者均持久化。</p></div>
+      <div class="card"><h3>重启即恢复</h3><p>应用进程不落盘业务状态；重启后从 PowerContext 读回并实际用于列表与界面。</p></div>
+    </div>
+  </section>
+
+  <section id="shots">
+    <h2>实际界面截图</h2>
+    <p class="sub">固定观察时刻 T2=2026-11-11T09:00:00Z 下的真实运行截图（非设计稿）。</p>
+    <div class="grid cols-2">
+      <figure class="shot">
+        <img src="assets/overview-learnerA.png" alt="学习者A概览：特征值逾期1天在待复习首位，矩阵乘法在即将到期">
+        <figcaption>学习者A：特征值「逾期 1 天」居待复习首位；矩阵乘法「已掌握」进入即将到期；偏好每日目标 5；复习历史 2 条。</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/overview-learnerB-isolation.png" alt="学习者B概览：仅见索引，无学习者A数据">
+        <figcaption>切换学习者B：仅见「索引」（逾期 3 天）、偏好每日目标 3，看不到 A 的任何数据 —— 隔离生效。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="rules">
+    <h2>可解释的复习规则</h2>
+    <p class="sub">确定性规则，不含模型智能推荐（亦不宣称）。全部规则有单元测试覆盖。</p>
+    <table class="spec">
+      <tr><th>情形</th><th>新间隔</th><th>掌握度</th></tr>
+      <tr><td>新知识点</td><td>1 天（创建即到期）</td><td>0 薄弱</td></tr>
+      <tr><td>需要加强</td><td>1 天</td><td>0 薄弱</td></tr>
+      <tr><td>基本掌握</td><td>min(30, max(2, 旧间隔×2)) 天</td><td>1 一般</td></tr>
+      <tr><td>已掌握</td><td>min(30, max(4, 旧间隔×3)) 天</td><td>2 已掌握</td></tr>
+    </table>
+    <p class="sub" style="margin-top:14px;">到期判定：next_review_at ≤ 当前时间。待复习排序：逾期天数降序 → 掌握程度升序 → 到期时间升序 → 标题 Unicode 码点序。逾期天数 = floor((now − next_review_at)/86400)。</p>
+  </section>
+
+  <section id="tech">
+    <h2>技术结构与 PowerContext 的实际作用</h2>
+    <p class="sub">Python stdlib 后端 + 原生 JS 前端 + 真实 PowerContext（官方 SQLite 后端）。PowerContext 是唯一业务存储。</p>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>架构</h3>
+        <p>浏览器（原生 JS，textContent 渲染防 XSS）→ app/server.py（stdlib HTTP）→ app/store.py（规则/隔离/恢复编排）→ app/powercontext_client.py（1.5.1 真实 HTTP 契约，逐请求审计）→ PowerContext Server（SQLite 持久化，基本记忆模式，无需付费模型）。</p>
+      </div>
+      <div class="card">
+        <h3>PowerContext 承担的核心功能</h3>
+        <p>每学习者一个 Scope 作隔离边界；知识点/复习记录/偏好/app-state 以 Atomic Memory 承载（remember/list/ETag PUT 替换/lifecycle forgotten）；每次复习另存 Source 证据。应用进程不写本地业务文件，重启后读回即恢复列表与偏好。不另设业务数据库，不用 JSON 冒充。</p>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:14px;">依赖固定：powercontext[cli,server]==1.5.1（PyPI）、pytest==8.4.2、Python 3.12；uv.lock 锁定。接口契约以运行中服务器 /openapi.json 实测核实并存档。</p>
+  </section>
+
+  <section id="try">
+    <h2>安装与体验</h2>
+    <p class="sub">本展示站为作品入口；核心应用按下列说明在本地运行（网站不冒充在线应用）。</p>
+    <pre class="code"><span class="c"># 前置：安装 uv；Python 由 uv 管理</span>
+cd qoder/study-review
+uv sync                                          <span class="c"># 固定依赖 powercontext[cli,server]==1.5.1</span>
+<span class="c"># 终端 A：真实 PowerContext Server（数据只写本项目 runtime/）</span>
+uv run python scripts/start_powercontext.py
+<span class="c"># 终端 B：固定样例 + 启动应用</span>
+uv run python examples/seed_sample.py --fixed
+uv run python -m app                             <span class="c"># http://127.0.0.1:18081</span>
+<span class="c"># 验证 / 测试 / 重置</span>
+uv run python examples/verify_sample.py          <span class="c"># 8 项断言</span>
+uv run python -m pytest                          <span class="c"># 37 用例</span>
+uv run python examples/reset.py --yes            <span class="c"># 安全软重置</span></pre>
+    <div class="callout" style="margin-top:14px;">重启恢复体验：停止应用后重新 <code>uv run python -m app</code>，启动日志打印「恢复的当前学习者」，待复习列表与偏好与重启前一致。可复现演示：<code>STUDY_REVIEW_FIXED_NOW=2026-11-11T09:00:00Z uv run python -m app</code>。</div>
+  </section>
+
+  <section id="verified">
+    <h2>已验证能力与已知限制</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>已验证（真实运行）</h3>
+        <ul class="checks">
+          <li>37 个自动化用例全过（规则/真实 PowerContext 集成/存储/API/跨进程重启），退出码 0。</li>
+          <li>固定样例 8/8 断言通过（待复习排序、逾期、隔离、偏好、恢复、Source 证据）。</li>
+          <li>真实 PowerContext 读写：remember/list/ETag 更新/lifecycle 删除/Source，审计留痕。</li>
+          <li>跨进程重启恢复：真实子进程 kill 后读回列表/偏好/选中态。</li>
+          <li>浏览器实测增删改、复习、偏好、切换学习者；截图见上。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>已知限制</h3>
+        <ul class="checks limits">
+          <li>单机单实例本地演示；PowerContext loopback 免认证，不面向公网多租户。</li>
+          <li>确定性规则、间隔上限 30 天；无模型智能推荐。</li>
+          <li>展示站为静态作品入口，核心应用需本地运行。</li>
+          <li>尚未开展真实用户效果评估（无真实用户数据）。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div>学习回顾台 · OceanBase 2026 生态赛 Qoder 赛题 · 代码：<a href="https://github.com/Gengxr/PowerContext/tree/qoder-study-review" target="_blank" rel="noopener">Gengxr/PowerContext @ qoder-study-review</a></div>
+    <div>复用 PowerContext（oceanbase/powercontext，Apache-2.0）经官方 HTTP API 调用，未改其源码；新增代码原创，位于 qoder/study-review/。</div>
+    <div>确定性规则，无模型推荐 · 尚未开展真实用户效果评估。</div>
+  </div>
+</footer>
+</body>
+</html>

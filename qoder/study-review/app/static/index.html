@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学习回顾台 · PowerContext</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <h1>学习回顾台</h1>
+    <span class="sub">薄弱知识点 · 复习调度 · 状态持久化（PowerContext）</span>
+  </div>
+  <div class="learner-bar">
+    <span id="pc-status" class="status-dot" title="PowerContext 连接状态">●</span>
+    <label for="learner-select">学习者</label>
+    <select id="learner-select"></select>
+    <button id="new-learner-btn" class="btn secondary">新建学习者</button>
+  </div>
+</header>
+
+<div id="toast" class="toast hidden"></div>
+
+<main class="layout">
+  <section class="col-main">
+    <div class="card progress-card">
+      <div class="progress-head">
+        <h2>今日进度</h2>
+        <span id="now-label" class="muted"></span>
+      </div>
+      <div class="progress-body">
+        <div class="progress-bar"><div id="progress-fill"></div></div>
+        <span id="progress-text"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>待复习 <span id="due-count" class="count-badge"></span></h2>
+      <p class="muted small">按公开规则排序：逾期天数降序 → 掌握程度升序 → 到期时间升序 → 标题 Unicode 码点序。</p>
+      <div id="due-list" class="due-list"></div>
+    </div>
+
+    <div class="card" id="upcoming-card">
+      <h2>即将到期</h2>
+      <div id="upcoming-list"></div>
+    </div>
+
+    <div class="card">
+      <h2>知识点管理</h2>
+      <form id="kp-form" class="kp-form">
+        <input id="kp-course" placeholder="课程，如：线性代数" required maxlength="64">
+        <input id="kp-title" placeholder="标题，如：特征值" required maxlength="128">
+        <select id="kp-mastery">
+          <option value="0">掌握程度：薄弱</option>
+          <option value="1">掌握程度：一般</option>
+          <option value="2">掌握程度：已掌握</option>
+        </select>
+        <textarea id="kp-notes" placeholder="笔记（可选）" rows="2" maxlength="2000"></textarea>
+        <div class="form-actions">
+          <button type="submit" id="kp-submit" class="btn primary">添加知识点</button>
+          <button type="button" id="kp-cancel" class="btn secondary hidden">取消编辑</button>
+        </div>
+      </form>
+      <div id="kp-list" class="kp-list"></div>
+    </div>
+
+    <div class="card">
+      <h2>复习历史</h2>
+      <div id="record-list" class="record-list"></div>
+    </div>
+  </section>
+
+  <aside class="col-side">
+    <div class="card">
+      <h2>学习偏好</h2>
+      <form id="prefs-form" class="prefs-form">
+        <label>每日复习目标（个）
+          <input id="pref-goal" type="number" min="1" max="50" required>
+        </label>
+        <label class="checkbox">
+          <input id="pref-upcoming" type="checkbox"> 显示“即将到期”
+        </label>
+        <label>即将到期展示窗口（天）
+          <input id="pref-horizon" type="number" min="1" max="60" required>
+        </label>
+        <button type="submit" class="btn primary">保存偏好</button>
+      </form>
+      <p class="muted small">偏好保存在 PowerContext 中，重启后自动恢复。</p>
+    </div>
+
+    <div class="card">
+      <h2>排序与到期规则</h2>
+      <div id="rules-box" class="rules-box muted small"></div>
+    </div>
+
+    <div class="card">
+      <h2>存储状态</h2>
+      <div id="storage-box" class="small"></div>
+      <p class="muted small">全部业务数据经 PowerContext HTTP API 读写（SQLite 持久化）；本应用进程不落盘业务状态，重启即恢复。</p>
+    </div>
+  </aside>
+</main>
+
+<footer class="footer muted small">
+  OceanBase 2026 生态赛 · Qoder 赛题作品 · 确定性规则，无模型推荐 ·
+  <a href="https://github.com/Gengxr/PowerContext/tree/qoder-study-review" target="_blank" rel="noopener">GitHub 分支</a>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>

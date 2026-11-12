@@ -1,0 +1,75 @@
+{
+  "run_id": "4b8c2600",
+  "pc_url": "http://127.0.0.1:18080",
+  "fixed_times": {
+    "T0": "2026-11-08T09:00:00Z",
+    "T1": "2026-11-08T10:00:00Z",
+    "T2": "2026-11-11T09:00:00Z"
+  },
+  "checks": [
+    {
+      "name": "A 待复习 == [特征值]",
+      "ok": true,
+      "detail": [
+        "特征值"
+      ]
+    },
+    {
+      "name": "A 即将到期 == [矩阵乘法]",
+      "ok": true,
+      "detail": [
+        "矩阵乘法"
+      ]
+    },
+    {
+      "name": "特征值逾期 1 天",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "B 待复习 == [索引]",
+      "ok": true,
+      "detail": [
+        "索引"
+      ]
+    },
+    {
+      "name": "B 看不到 A 的数据",
+      "ok": true,
+      "detail": [
+        "索引"
+      ]
+    },
+    {
+      "name": "A 偏好 daily_goal=5 恢复",
+      "ok": true,
+      "detail": {
+        "type": "learner-preference",
+        "daily_goal": 5,
+        "show_upcoming": true,
+        "upcoming_horizon_days": 7
+      }
+    },
+    {
+      "name": "应用状态恢复选中 A",
+      "ok": true,
+      "detail": "scp_0rxeenx9kc0bkvrfrzr5x9nsxs"
+    },
+    {
+      "name": "A 复习记录 2 条且含 Source 证据",
+      "ok": true,
+      "detail": [
+        {
+          "result": "needs_work",
+          "source_id": "review-rev-2a2da9a6d6f2"
+        },
+        {
+          "result": "mastered",
+          "source_id": "review-rev-6ea5b71c730a"
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "audit_log": "evidence/sample-verification-audit.jsonl"
+}

@@ -1,0 +1,29 @@
+{
+  "mode": "fixed",
+  "t0": "2026-11-08T09:00:00Z",
+  "t1": "2026-11-08T10:00:00Z",
+  "observe_at": "2026-11-11T09:00:00Z",
+  "learner_a": {
+    "scope_id": "scp_1wxj4pgszxvq1w764y0ddhet6y",
+    "name": "学习者A"
+  },
+  "learner_b": {
+    "scope_id": "scp_0xb79swbbhy6w4gn6sjw1h9fpm",
+    "name": "学习者B"
+  },
+  "a_due_titles": [
+    "特征值"
+  ],
+  "a_upcoming_titles": [
+    "矩阵乘法"
+  ],
+  "a_prefs": {
+    "type": "learner-preference",
+    "daily_goal": 5,
+    "show_upcoming": true,
+    "upcoming_horizon_days": 7
+  },
+  "b_due_titles": [
+    "索引"
+  ]
+}

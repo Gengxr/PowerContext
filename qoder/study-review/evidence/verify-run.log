@@ -1,0 +1,9 @@
+PASS A 待复习 == [特征值] :: ["特征值"]
+PASS A 即将到期 == [矩阵乘法] :: ["矩阵乘法"]
+PASS 特征值逾期 1 天 :: 1
+PASS B 待复习 == [索引] :: ["索引"]
+PASS B 看不到 A 的数据 :: ["索引"]
+PASS A 偏好 daily_goal=5 恢复 :: {"type": "learner-preference", "daily_goal": 5, "show_upcoming": true, "upcoming_horizon_days": 7}
+PASS 应用状态恢复选中 A :: "scp_0rxeenx9kc0bkvrfrzr5x9nsxs"
+PASS A 复习记录 2 条且含 Source 证据 :: [{"result": "needs_work", "source_id": "review-rev-2a2da9a6d6f2"}, {"result": "mastered", "source_id": "review-rev-6ea5b71c730a"}]
+ALL PASS -> D:\seekdb-qoder-study\qoder\study-review\evidence\sample-verification.json

@@ -1,0 +1,17 @@
+[project]
+name = "study-review"
+version = "1.0.0"
+description = "学习回顾台：基于 PowerContext 的薄弱知识点管理与复习调度应用（OceanBase 2026 生态赛 Qoder 赛题）"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "powercontext[cli,server]==1.5.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==8.4.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

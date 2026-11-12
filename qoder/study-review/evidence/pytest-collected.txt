@@ -1,0 +1,6 @@
+tests/test_api.py: 5
+tests/test_powercontext_integration.py: 8
+tests/test_restart.py: 1
+tests/test_rules.py: 14
+tests/test_store.py: 9
+
